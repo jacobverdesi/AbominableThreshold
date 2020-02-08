@@ -44,6 +44,12 @@ def body():
            "print(-1);}else:{print(1);}}}"
 
 def print_trailer(bestAttribute,bestThreshold):
+    """
+
+    :param bestAttribute:
+    :param bestThreshold:
+    :return:
+    """
     return "def main():{"+\
            comment("Main function;")\
            +"fileName=sys.argv[1];"\
