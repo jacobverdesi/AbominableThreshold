@@ -7,19 +7,25 @@ from matplotlib import pyplot as plt
     Email:  jxv3386@rit.edu
     Description:
     This is a Mentor program for Classifying Abominable Data
-
+    It also graphs!
 """
 
 def comment(str):
-    return "\"\"\"{"+str+"}\"\"\";"
+    """
+    Simple function for formatting comments in trainer
+    """
+    return "\"\"\";"+str+"\"\"\";"
 def indent(train):
+    """
+    Takes in
+    """
     tab=0
     out=""
     for c in train:
-        if(c=='{'or c=='}'or c==';'):
-            if(c=='{'):
+        if c== '{'or c== '}'or c== ';':
+            if c=='{':
                 tab+=1
-            if(c=='}'):
+            if c=='}':
                 tab-=1
             out += "\n" + (tab * '\t')
         else:
@@ -29,7 +35,7 @@ def header(file):
     return "import pandas as pd;" \
            "import sys;"\
            +comment("File:"+file.name+";Author: Jacob Verdesi;Email:jxv3386@rit.edu;"
-            "Description:This is a Trained program for Classifying Abominable Data")
+            "Description:This is a Trained program for Classifying Abominable Data;")
 
 def body():
     return "def printClassified(data,bestAttribute,bestThreshold):{" \
@@ -39,7 +45,7 @@ def body():
 
 def print_trailer(bestAttribute,bestThreshold):
     return "def main():{"+\
-           comment("Main function")\
+           comment("Main function;")\
            +"fileName=sys.argv[1];"\
            +"data=(pd.read_csv(fileName,sep=','));"\
            +"printClassified(data,\""+str(bestAttribute)+"\","+str(bestThreshold)+");"\

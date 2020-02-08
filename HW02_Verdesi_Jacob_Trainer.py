@@ -1,10 +1,10 @@
 import pandas as pd
 import sys
 """
-	File:HW02_Verdesi_Jacob_Trainer.py
-	Author: Jacob Verdesi
-	Email:jxv3386@rit.edu
-	Description:This is a Trained program for Classifying Abominable Data
+File:HW02_Verdesi_Jacob_Trainer.py
+Author: Jacob Verdesi
+Email:jxv3386@rit.edu
+Description:This is a Trained program for Classifying Abominable Data
 """
 def printClassified(data,bestAttribute,bestThreshold):
 	for i in data[bestAttribute]:
@@ -18,7 +18,7 @@ def printClassified(data,bestAttribute,bestThreshold):
 	
 def main():
 	"""
-		Main function
+	Main function
 	"""
 	fileName=sys.argv[1]
 	data=(pd.read_csv(fileName,sep=','))
