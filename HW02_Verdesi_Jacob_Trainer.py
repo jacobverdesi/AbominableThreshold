@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 """
 	File:HW02_Verdesi_Jacob_Trainer.py
 	Author: Jacob Verdesi
@@ -19,7 +20,7 @@ def main():
 	"""
 		Main function
 	"""
-	fileName="the_validation_file.csv"
+	fileName=sys.argv[1]
 	data=(pd.read_csv(fileName,sep=','))
 	printClassified(data,"Height",135)
 	
