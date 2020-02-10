@@ -1,4 +1,6 @@
 import math
+import sys
+
 import pandas as pd
 from matplotlib import pyplot as plt
 """
@@ -17,7 +19,8 @@ def comment(str):
     return "\"\"\";"+str+"\"\"\";"
 def indent(train):
     """
-    Takes in
+    Takes in a string with {} and ; as indents and next lines
+    reformats string to be indented
     """
     tab=0
     out=""
@@ -32,23 +35,34 @@ def indent(train):
             out+=c
     return out
 def header(file):
+    """
+    Header file for trainer such as imports and comments
+    string format to be writen to trainer
+    """
     return "import pandas as pd;" \
            "import sys;"\
            +comment("File:"+file.name+";Author: Jacob Verdesi;Email:jxv3386@rit.edu;"
             "Description:This is a Trained program for Classifying Abominable Data;")
 
 def body():
-    return "def printClassified(data,bestAttribute,bestThreshold):{" \
-           "for i in data[bestAttribute]:{" \
+    """
+    body program writes functions into a string to be printed into trainer
+    :return:
+    """
+    return "def printClassified(data,bestAttribute,bestThreshold):{"\
+            +comment("given the best attribute of the data and best threshold;"
+                     "print out -1 being Class A and 1 Class B;"
+                     ":param data: pandas dataFrame;"
+                     ":param bestAttribute: Name of attribute;"
+                     ":param bestThreshold: threshold of attribute;")\
+           +"for i in data[bestAttribute]:{" \
            "if (bestAttribute==\"Height\" and i>bestThreshold) or (bestAttribute==\"Age\" and i<bestThreshold):{" \
            "print(-1);}else:{print(1);}}}"
 
 def print_trailer(bestAttribute,bestThreshold):
     """
-
-    :param bestAttribute:
-    :param bestThreshold:
-    :return:
+    trailer function for writing main class of trainer which calls methods with
+    values from the mentor
     """
     return "def main():{"+\
            comment("Main function;")\
@@ -81,6 +95,9 @@ def get_quantized_bin_size(data,attribute):
         if (list[index] != list[index + 1]):
             return list[index + 1] - list[index]
 def shortestDistance(yAxis,xAxis):
+    """
+    calculates the shortest distance of points given by x and y axis lists:
+    """
     shortest=math.inf
     pointIndex=0
     if len(yAxis)==len(xAxis):
@@ -90,7 +107,13 @@ def shortestDistance(yAxis,xAxis):
                 shortest=distance
                 pointIndex=i
     return shortest,pointIndex
-def binary(data):
+def binaryThreshold(data):
+    """
+    Finds the best attribute and threshold of a given dataset
+    makes Confusion Histogram, Cost vs Attribute, and Roc curve graphs
+    :param data: Pandas dataset quantized
+    :return: bestAttribute,bestThresh
+    """
     minMiss=math.inf
     bestThresh=0
     tn=tp=fn=fp=pd.DataFrame()
@@ -160,6 +183,7 @@ def binary(data):
     ax2.set_xlabel('False Positive Rate (%)')
     ax2.set_ylabel('True Positive Rate (%)')
     ax2.set(adjustable='box', aspect='equal')
+
     heightRocDistance,heightRocThresh=shortestDistance(bestFpr[1],bestTpr[1])
     ax3.plot(bestTpr[1],bestFpr[1],'-gD',markevery=[heightRocThresh])
     ax3.plot((0,1),(0,1),linestyle='--',color='b')
@@ -168,19 +192,24 @@ def binary(data):
     ax3.set_ylabel('True Positive Rate (%)')
     ax3.set(adjustable='box', aspect='equal')
 
-
-    #ax2.annotate(minDistThresh,(bestTpr[rocIndex],bestFpr[rocIndex]))
     plt.tight_layout()
     plt.show()
     return bestAttribute,bestThresh
 
 def main():
-    fileName="Abominable_Data_For_1D_Classification__v92_HW3_720_final.csv"
+    """
+    Main function handles arguments
+    read in data set and quantize it
+    get the best attributes and threshold
+    add all header body and trailer together then write to trainer file
+    :return:
+    """
+    fileName=sys.argv[1]
     writeFile="HW02_Verdesi_Jacob_Trainer.py"
     file=open(writeFile,"w")
 
     data=quantize(pd.read_csv(fileName,sep=','))
-    bestAttribute,bestThreshold=binary(data)
+    bestAttribute,bestThreshold=binaryThreshold(data)
 
     trainer=indent(header(file)+body()+print_trailer(bestAttribute,bestThreshold))
     file.write(trainer)
